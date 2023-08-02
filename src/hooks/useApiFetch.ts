@@ -4,8 +4,9 @@ import axios, {
   type AxiosError,
   type AxiosRequestConfig
 } from 'axios'
+import { type Todo } from '../types'
 
-type ApiData = any // Define the type of data returned by the API
+type ApiData = Todo[] // Define the type of data returned by the API
 
 interface ApiError {
   message: string

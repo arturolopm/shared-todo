@@ -4,9 +4,9 @@ interface Props {
   todos: ListOfTodos
   onRemoveTodo: (id: TodoId) => void
   onToggleCompleteTodo: ({
-    id,
+    _id,
     completed
-  }: Pick<TodoType, 'id' | 'completed'>) => void
+  }: Pick<TodoType, '_id' | 'completed'>) => void
 }
 export const Todos: React.FC<Props> = ({
   todos,
@@ -17,12 +17,12 @@ export const Todos: React.FC<Props> = ({
     <ul className='todo-list'>
       {todos.map((todo) => (
         <li
-          key={todo.id}
+          key={todo._id}
           className={`${todo.completed ? 'completed' : ''}`}>
           <Todo
-            key={todo.id}
-            id={todo.id}
-            title={todo.title}
+            key={todo._id}
+            _id={todo._id}
+            name={todo.name}
             completed={todo.completed}
             onToggleCompleteTodo={onToggleCompleteTodo}
             onRemoveTodo={onRemoveTodo}
