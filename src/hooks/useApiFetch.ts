@@ -6,25 +6,24 @@ import axios, {
 } from 'axios'
 import { type Todo } from '../types'
 
-type ApiData = Todo[] // Define the type of data returned by the API
-
 interface ApiError {
   message: string
   status: number
 }
 
 interface ApiResponse {
-  data: ApiData | null
+  response: Todo[] | null
   loading: boolean
   error: ApiError | null
 }
 
 const useApiFetch = (
   url: string,
-  method: AxiosRequestConfig['method'] = 'GET'
+  method: AxiosRequestConfig['method'] = 'GET',
+  data?: Todo
 ): ApiResponse => {
   // State variables to manage the API response
-  const [data, setData] = useState<ApiData | null>(null)
+  const [response, setResponse] = useState<Todo[] | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<ApiError | null>(null)
 
@@ -37,12 +36,13 @@ const useApiFetch = (
 
         const config: AxiosRequestConfig = {
           method,
-          url
+          url,
+          data
         }
 
         const response: AxiosResponse = await axios(config)
 
-        setData(response.data)
+        setResponse(response.data)
       } catch (err) {
         const axiosError = err as AxiosError
 
@@ -58,9 +58,9 @@ const useApiFetch = (
     }
 
     fetchData() // eslint-disable-line @typescript-eslint/no-floating-promises
-  }, [url, method])
+  }, [url, method, data])
 
-  return { data, loading, error }
+  return { response, loading, error }
 }
 
 export default useApiFetch

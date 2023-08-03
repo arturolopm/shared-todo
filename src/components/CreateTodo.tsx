@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { type TodoTitle } from '../types'
 
 interface Props {
-  saveTodo: ({ title }: TodoTitle) => void
+  saveTodo: ({ name }: TodoTitle) => Promise<void>
 }
 export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
   const [inputValue, setInputValue] = useState('')
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    saveTodo({ title: inputValue })
+    void saveTodo({ name: inputValue })
     setInputValue('')
   }
   return (

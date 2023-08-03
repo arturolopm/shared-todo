@@ -2,7 +2,7 @@ import { type TodoTitle } from '../types'
 import { CreateTodo } from './CreateTodo'
 
 interface Props {
-  onAddTodo: ({ title }: TodoTitle) => void
+  onAddTodo: ({ name }: TodoTitle) => Promise<void>
 }
 export const Header: React.FC<Props> = ({ onAddTodo }) => {
   return (

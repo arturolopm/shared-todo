@@ -32,22 +32,23 @@ import useApiFetch from './hooks/useApiFetch'
 
 const App = (): JSX.Element => {
   const [todos, setTodos] = useState<TodoType[]>([])
+  const [toAdd, setToAdd] = useState<TodoType>()
 
   const apiUrl =
     typeof import.meta.env.VITE_SERVER_URL === 'string'
       ? `${import.meta.env.VITE_SERVER_URL}`
       : ''
   const {
-    data
+    response
     //  loading, error
   } = useApiFetch(`${apiUrl}/item`, 'GET')
   useEffect(() => {
-    console.log(data)
+    console.log(response)
 
-    if (data !== null) {
-      setTodos(data)
+    if (response !== null) {
+      setTodos(response)
     }
-  }, [data])
+  }, [response])
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
     TODO_FILTERS.ALL
   )
@@ -89,15 +90,19 @@ const App = (): JSX.Element => {
     if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed
     return todo
   })
-  const handleAddTodo = ({ name }: TodoTitle): void => {
-    const newTodo = {
+  const handleAddTodo = async ({ name }: TodoTitle): Promise<void> => {
+    const data = {
       name,
-      // _id: crypto.randomUUID(),
       completed: false
     }
-    const newTodos = [...todos, newTodo]
-    setTodos(newTodos)
+    setToAdd(data)
+
+    setTodos((prevTodos) => [...prevTodos, data])
   }
+  const addedTodo: TodoType[] | undefined =
+    useApiFetch(`${apiUrl}/item`, 'Post', toAdd)?.response ?? undefined
+  console.log('Added ', addedTodo)
+
   return (
     <>
       <DarkMode />
