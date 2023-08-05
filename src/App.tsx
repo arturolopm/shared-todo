@@ -33,6 +33,9 @@ import useApiFetch from './hooks/useApiFetch'
 const App = (): JSX.Element => {
   const [todos, setTodos] = useState<TodoType[]>([])
   const [toAdd, setToAdd] = useState<TodoType>()
+  const [toModify, setToModify] = useState<TodoType>()
+
+  console.log('to modify ', toModify)
 
   const apiUrl =
     typeof import.meta.env.VITE_SERVER_URL === 'string'
@@ -64,6 +67,7 @@ const App = (): JSX.Element => {
   }: Pick<TodoType, '_id' | 'completed'>): void => {
     const newTodos = todos.map((todo) => {
       if (todo._id === _id) {
+        setToModify(todo)
         return {
           ...todo,
           completed
@@ -73,6 +77,14 @@ const App = (): JSX.Element => {
     })
     setTodos(newTodos)
   }
+  const apiUrlWithId =
+    toModify?._id !== undefined ? `${apiUrl}/item/${toModify._id}` : 'Error'
+
+  const apiResponse = useApiFetch(apiUrlWithId, 'PUT', toModify) // eslint-disable-line @typescript-eslint/no-unused-vars
+  // const modifiedTodo: TodoType[] | undefined =
+  //   apiResponse?.response ?? undefined
+  // console.log(modifiedTodo)
+
   const handleFilterChange = (filter: FilterValue): void => {
     setFilterSelected(filter)
   }
