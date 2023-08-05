@@ -35,7 +35,7 @@ export const DarkMode: React.FC = () => {
         handleDarkMode()
       }}
       className='darkbtn'>
-      Dark Mode
+      {`${darkMode ? 'Light' : 'Dark'}`} Mode
     </button>
   )
 }
