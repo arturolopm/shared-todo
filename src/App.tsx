@@ -34,6 +34,8 @@ const App = (): JSX.Element => {
   const [todos, setTodos] = useState<TodoType[]>([])
   const [toAdd, setToAdd] = useState<TodoType>()
   const [toModify, setToModify] = useState<TodoType>()
+  const [toDelete, setToDelete] = useState<TodoId>()
+  console.log('todelete', toDelete)
 
   console.log('to modify ', toModify)
 
@@ -57,6 +59,7 @@ const App = (): JSX.Element => {
   )
 
   const handleRemove = ({ _id }: TodoId): void => {
+    setToDelete({ _id })
     const newTodos = todos.filter((todo) => todo._id !== _id)
     setTodos(newTodos)
   }
@@ -84,6 +87,10 @@ const App = (): JSX.Element => {
   // const modifiedTodo: TodoType[] | undefined =
   //   apiResponse?.response ?? undefined
   // console.log(modifiedTodo)
+  const apiUrlWithIdToDelete =
+    toDelete?._id !== undefined ? `${apiUrl}/item/${toDelete._id}` : 'Error'
+
+  const deleteResponse = useApiFetch(apiUrlWithIdToDelete, 'DELETE') // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const handleFilterChange = (filter: FilterValue): void => {
     setFilterSelected(filter)
