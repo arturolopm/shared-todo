@@ -35,6 +35,8 @@ const App = (): JSX.Element => {
   const [toAdd, setToAdd] = useState<TodoType>()
   const [toModify, setToModify] = useState<TodoType>()
   const [toDelete, setToDelete] = useState<TodoId>()
+  const [removeCompleted, setRemoveCompleted] = useState<boolean>(false)
+
   console.log('todelete', toDelete)
 
   console.log('to modify ', toModify)
@@ -100,6 +102,12 @@ const App = (): JSX.Element => {
     const newTodos = todos.filter((todo) => !todo.completed)
     setTodos(newTodos)
   }
+  useEffect(() => {
+    handleRemoveAllCompleted()
+  }, [removeCompleted])
+
+  const apiUrlDeleteMany = removeCompleted ? `${apiUrl}/item/` : 'Error'
+  const deleteAllCompletedResponse = useApiFetch(apiUrlDeleteMany, 'DELETE') // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const activeCount = todos.filter((todo) => !todo.completed).length
   const completedCount = todos.length - activeCount
@@ -136,7 +144,9 @@ const App = (): JSX.Element => {
           activeCount={activeCount}
           completedCount={completedCount}
           filterSelected={filterSelected}
-          onClearCompleted={handleRemoveAllCompleted}
+          onDeleteCompleted={() => {
+            setRemoveCompleted((prev) => !prev)
+          }}
           handleFilterChange={handleFilterChange}
         />
       </div>
