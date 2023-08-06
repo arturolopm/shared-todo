@@ -11,6 +11,7 @@ import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { DarkMode } from './components/DarkMode'
 import useApiFetch from './hooks/useApiFetch'
+import LoginForm from './components/LoginForm'
 
 // const mockTodos = [
 //   {
@@ -31,17 +32,14 @@ import useApiFetch from './hooks/useApiFetch'
 // ]
 
 const App = (): JSX.Element => {
+  const [user, setUser] = useState<object | null>(null)
   const [todos, setTodos] = useState<TodoType[]>([])
   const [toAdd, setToAdd] = useState<TodoType>()
   const [toModify, setToModify] = useState<TodoType>()
   const [toDelete, setToDelete] = useState<TodoId>()
   const [removeCompleted, setRemoveCompleted] = useState<boolean>(false)
 
-  console.log('todelete', toDelete)
-
-  console.log('to modify ', toModify)
-
-  const apiUrl =
+  const apiUrl: string =
     typeof import.meta.env.VITE_SERVER_URL === 'string'
       ? `${import.meta.env.VITE_SERVER_URL}`
       : ''
@@ -133,23 +131,29 @@ const App = (): JSX.Element => {
   return (
     <>
       <DarkMode />
-      <div className='todoapp'>
-        <Header onAddTodo={handleAddTodo} />
-        <Todos
-          onToggleCompleteTodo={handleCompleted}
-          onRemoveTodo={handleRemove}
-          todos={filteredTodos}
-        />
-        <Footer
-          activeCount={activeCount}
-          completedCount={completedCount}
-          filterSelected={filterSelected}
-          onDeleteCompleted={() => {
-            setRemoveCompleted((prev) => !prev)
-          }}
-          handleFilterChange={handleFilterChange}
-        />
-      </div>
+      {user !== null ? (
+        <>
+          <div className='todoapp'>
+            <Header onAddTodo={handleAddTodo} />
+            <Todos
+              onToggleCompleteTodo={handleCompleted}
+              onRemoveTodo={handleRemove}
+              todos={filteredTodos}
+            />
+            <Footer
+              activeCount={activeCount}
+              completedCount={completedCount}
+              filterSelected={filterSelected}
+              onDeleteCompleted={() => {
+                setRemoveCompleted((prev) => !prev)
+              }}
+              handleFilterChange={handleFilterChange}
+            />
+          </div>
+        </>
+      ) : (
+        <LoginForm apiUrl={apiUrl} />
+      )}
     </>
   )
 }

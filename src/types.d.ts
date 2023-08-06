@@ -13,3 +13,12 @@ export type TodoCompleted = Pick<Todo, 'completed'>
 export type ListOfTodos = Todo[]
 
 export type FilterValue = (typeof TODO_FILTERS)[keyof typeof TODO_FILTERS]
+
+export interface User {
+  _id: string
+  name?: string
+  email: string
+  password?: string
+}
+
+export type UserValidation = Omit<User, '_id'>
