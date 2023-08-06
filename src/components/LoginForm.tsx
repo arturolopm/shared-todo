@@ -6,14 +6,14 @@ type logOrRegister = 'login' | 'register' | 'none'
 
 interface LoginFormProps {
   apiUrl: string
-  user: User
+
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
 }
 
-const LoginForm = ({ apiUrl, user }: LoginFormProps): JSX.Element => {
+const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
   const [logOrRegister, setLogOrRegister] = useState<logOrRegister>('none')
   const [action, setAction] = useState<logOrRegister>('none')
   const [data, setData] = useState<UserValidation | undefined>()
-  console.log('data', data)
 
   const emailRef = useRef<HTMLInputElement>()
   const passwordRef = useRef<HTMLInputElement>()
@@ -29,7 +29,8 @@ const LoginForm = ({ apiUrl, user }: LoginFormProps): JSX.Element => {
     setAction('login')
   }
 
-  const handleRegister = () => {
+  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setData({
       name: nameRef.current?.value as unknown as string,
       email: emailRef.current?.value as unknown as string,
@@ -38,17 +39,23 @@ const LoginForm = ({ apiUrl, user }: LoginFormProps): JSX.Element => {
     setAction('register')
   }
 
-  useEffect(() => {
-    setData(data)
-  }, [data])
-
   const urlToValidate = useMemo(() => (data ? apiUrl : 'Error'), [apiUrl, data])
 
-  useAuth(action, urlToValidate, 'POST', data)
+  const { response } = useAuth(action, urlToValidate, 'POST', data)
+
+  useEffect(() => {
+    if (
+      response !== null &&
+      response !== 'ALREADY_USER' &&
+      response !== 'USER_NOT_FOUND'
+    ) {
+      setUser(response as User)
+    }
+  }, [response])
 
   return (
     <>
-      {!logOrRegister ? (
+      {logOrRegister === 'none' ? (
         <div className='todoapp'>
           <h2 className='selection'>
             <button
@@ -80,7 +87,6 @@ const LoginForm = ({ apiUrl, user }: LoginFormProps): JSX.Element => {
               type='password'
               className='new-todo'
               placeholder='Password'
-              onChange={() => console.log('Pass', passwordRef.current?.value)}
               ref={passwordRef as LegacyRef<HTMLInputElement> | undefined}
             />
             <div>
@@ -105,7 +111,7 @@ const LoginForm = ({ apiUrl, user }: LoginFormProps): JSX.Element => {
           <h2>Register</h2>
           <form
             className='main'
-            onSubmit={handleRegister}>
+            onSubmit={(e) => handleRegister(e)}>
             <input
               type='text'
               className='new-todo'

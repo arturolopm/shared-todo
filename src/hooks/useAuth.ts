@@ -12,7 +12,7 @@ interface ApiError {
 }
 
 interface ApiResponse {
-  response: User | null
+  response: User | null | string
   loading: boolean
   error: ApiError | null
 }
@@ -25,7 +25,7 @@ const useAuth = (
 ): ApiResponse => {
   // State variables to manage the API response
   const [response, setResponse] = useState<User | null>(null)
-  console.log('Response', response)
+
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<ApiError | null>(null)
 

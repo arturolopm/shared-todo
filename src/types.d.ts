@@ -15,6 +15,7 @@ export type ListOfTodos = Todo[]
 export type FilterValue = (typeof TODO_FILTERS)[keyof typeof TODO_FILTERS]
 
 export interface User {
+  token?: string
   _id: string
   name?: string
   email: string

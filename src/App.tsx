@@ -4,7 +4,8 @@ import {
   type TodoTitle,
   type FilterValue,
   type TodoId,
-  type Todo as TodoType
+  type Todo as TodoType,
+  User
 } from './types'
 import { TODO_FILTERS } from './consts'
 import { Footer } from './components/Footer'
@@ -32,7 +33,8 @@ import LoginForm from './components/LoginForm'
 // ]
 
 const App = (): JSX.Element => {
-  const [user, setUser] = useState<object | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+
   const [todos, setTodos] = useState<TodoType[]>([])
   const [toAdd, setToAdd] = useState<TodoType>()
   const [toModify, setToModify] = useState<TodoType>()
@@ -48,8 +50,6 @@ const App = (): JSX.Element => {
     //  loading, error
   } = useApiFetch(`${apiUrl}/item`, 'GET')
   useEffect(() => {
-    console.log(response)
-
     if (response !== null) {
       setTodos(response)
     }
@@ -126,7 +126,6 @@ const App = (): JSX.Element => {
   }
   const addedTodo: TodoType[] | undefined =
     useApiFetch(`${apiUrl}/item`, 'Post', toAdd)?.response ?? undefined
-  console.log('Added ', addedTodo)
 
   return (
     <>
@@ -152,7 +151,10 @@ const App = (): JSX.Element => {
           </div>
         </>
       ) : (
-        <LoginForm apiUrl={apiUrl} />
+        <LoginForm
+          apiUrl={apiUrl}
+          setUser={setUser}
+        />
       )}
     </>
   )
