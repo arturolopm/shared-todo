@@ -49,6 +49,7 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
       response !== 'ALREADY_USER' &&
       response !== 'USER_NOT_FOUND'
     ) {
+      localStorage.setItem('user', JSON.stringify(response))
       setUser(response as User)
     }
   }, [response])

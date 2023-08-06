@@ -5,7 +5,7 @@ import {
   type FilterValue,
   type TodoId,
   type Todo as TodoType,
-  User
+  type User
 } from './types'
 import { TODO_FILTERS } from './consts'
 import { Footer } from './components/Footer'
@@ -33,7 +33,11 @@ import LoginForm from './components/LoginForm'
 // ]
 
 const App = (): JSX.Element => {
-  const [user, setUser] = useState<User | null>(null)
+  const dataFromStorage = localStorage.getItem('user') ?? null
+  const userFromStorage: User | null =
+    dataFromStorage !== null ? JSON.parse(dataFromStorage) : null
+
+  const [user, setUser] = useState<User | null>(userFromStorage)
 
   const [todos, setTodos] = useState<TodoType[]>([])
   const [toAdd, setToAdd] = useState<TodoType>()
