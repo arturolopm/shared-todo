@@ -40,7 +40,7 @@ const useApiFetch = (
           url,
           data,
           headers: {
-            Authorization: `Bearer ${user?.token}`
+            Authorization: `Bearer ${user!.token}`
           }
         }
 

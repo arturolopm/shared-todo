@@ -38,8 +38,13 @@ const App = (): JSX.Element => {
     dataFromStorage !== null ? JSON.parse(dataFromStorage) : null
 
   const [user, setUser] = useState<User | null>(userFromStorage)
+  console.log('user', user)
 
-  const [todos, setTodos] = useState<TodoType[]>([])
+  const initialTodos =
+    user?.lists && user.lists[0]?.items ? user.lists[0].items : []
+  const [todos, setTodos] = useState<TodoType[]>(initialTodos)
+  console.log(todos)
+
   const [toAdd, setToAdd] = useState<TodoType>()
   const [toModify, setToModify] = useState<TodoType>()
   const [toDelete, setToDelete] = useState<TodoId>()
@@ -49,10 +54,11 @@ const App = (): JSX.Element => {
     typeof import.meta.env.VITE_SERVER_URL === 'string'
       ? `${import.meta.env.VITE_SERVER_URL}`
       : ''
+  const userID = user !== null ? user._id : 'ERROR'
   const {
     response
     //  loading, error
-  } = useApiFetch(`${apiUrl}/item`, 'GET', undefined, user!)
+  } = useApiFetch(`${apiUrl}/item/${userID}`, 'GET', undefined, user!)
   useEffect(() => {
     if (response !== null) {
       setTodos(response)
@@ -87,7 +93,7 @@ const App = (): JSX.Element => {
   const apiUrlWithId =
     toModify?._id !== undefined ? `${apiUrl}/item/${toModify._id}` : 'Error'
 
-  const apiResponse = useApiFetch(apiUrlWithId, 'PUT', toModify) // eslint-disable-line @typescript-eslint/no-unused-vars
+  const apiResponse = useApiFetch(apiUrlWithId, 'PUT', toModify, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
   // const modifiedTodo: TodoType[] | undefined =
   //   apiResponse?.response ?? undefined
   // console.log(modifiedTodo)
@@ -129,7 +135,8 @@ const App = (): JSX.Element => {
     setTodos((prevTodos) => [...prevTodos, data])
   }
   const addedTodo: TodoType[] | undefined =
-    useApiFetch(`${apiUrl}/item`, 'Post', toAdd)?.response ?? undefined
+    useApiFetch(`${apiUrl}/item/${userID}`, 'Post', toAdd, user!)?.response ??
+    undefined
 
   return (
     <>
