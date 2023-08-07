@@ -4,7 +4,7 @@ import axios, {
   type AxiosError,
   type AxiosRequestConfig
 } from 'axios'
-import { type Todo } from '../types'
+import { User, type Todo } from '../types'
 
 interface ApiError {
   message: string
@@ -20,7 +20,8 @@ interface ApiResponse {
 const useApiFetch = (
   url: string,
   method: AxiosRequestConfig['method'] = 'GET',
-  data?: Todo
+  data?: Todo,
+  user?: User
 ): ApiResponse => {
   // State variables to manage the API response
   const [response, setResponse] = useState<Todo[] | null>(null)
@@ -37,7 +38,10 @@ const useApiFetch = (
         const config: AxiosRequestConfig = {
           method,
           url,
-          data
+          data,
+          headers: {
+            Authorization: `Bearer ${user?.token}`
+          }
         }
 
         const response: AxiosResponse = await axios(config)

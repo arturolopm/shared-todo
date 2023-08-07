@@ -14,12 +14,18 @@ export type ListOfTodos = Todo[]
 
 export type FilterValue = (typeof TODO_FILTERS)[keyof typeof TODO_FILTERS]
 
+export interface List {
+  name: string
+  owners: string[]
+  items: string
+}
 export interface User {
   token?: string
   _id: string
   name?: string
   email: string
   password?: string
+  list?: List
 }
 
 export type UserValidation = Omit<User, '_id'>

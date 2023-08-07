@@ -52,7 +52,7 @@ const App = (): JSX.Element => {
   const {
     response
     //  loading, error
-  } = useApiFetch(`${apiUrl}/item`, 'GET')
+  } = useApiFetch(`${apiUrl}/item`, 'GET', undefined, user!)
   useEffect(() => {
     if (response !== null) {
       setTodos(response)
