@@ -150,15 +150,15 @@ const App = (): JSX.Element => {
       {user !== null ? (
         <>
           <div className='todoapp'>
-            <InvitationButton
-              apiUrl={apiUrl}
-              user={user}
-            />
             <Header onAddTodo={handleAddTodo} />
             <Todos
               onToggleCompleteTodo={handleCompleted}
               onRemoveTodo={handleRemove}
               todos={filteredTodos}
+            />
+            <InvitationButton
+              apiUrl={apiUrl}
+              user={user}
             />
             <Footer
               activeCount={activeCount}

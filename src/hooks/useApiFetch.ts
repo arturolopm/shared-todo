@@ -12,7 +12,7 @@ interface ApiError {
 }
 
 interface ApiResponse {
-  response: Todo[] | null
+  response: any
   loading: boolean
   error: ApiError | null
 }

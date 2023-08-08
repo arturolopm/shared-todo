@@ -30,3 +30,9 @@ export interface User {
 }
 
 export type UserValidation = Omit<User, '_id'>
+
+export interface Invitation {
+  sender: string
+  senderId: string
+  receiver: string
+}
