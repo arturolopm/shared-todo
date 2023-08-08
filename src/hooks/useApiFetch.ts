@@ -20,7 +20,7 @@ interface ApiResponse {
 const useApiFetch = (
   url: string,
   method: AxiosRequestConfig['method'] = 'GET',
-  data?: Todo,
+  data?: any,
   user?: User
 ): ApiResponse => {
   // State variables to manage the API response

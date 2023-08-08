@@ -13,6 +13,7 @@ import { Header } from './components/Header'
 import { DarkMode } from './components/DarkMode'
 import useApiFetch from './hooks/useApiFetch'
 import LoginForm from './components/LoginForm'
+import InvitationButton from './components/InvitationButton'
 
 // const mockTodos = [
 //   {
@@ -100,7 +101,12 @@ const App = (): JSX.Element => {
   const apiUrlWithIdToDelete =
     toDelete?._id !== undefined ? `${apiUrl}/item/${toDelete._id}` : 'Error'
 
-  const deleteResponse = useApiFetch(apiUrlWithIdToDelete, 'DELETE') // eslint-disable-line @typescript-eslint/no-unused-vars
+  const deleteResponse = useApiFetch(
+    apiUrlWithIdToDelete,
+    'DELETE',
+    undefined,
+    user!
+  ) // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const handleFilterChange = (filter: FilterValue): void => {
     setFilterSelected(filter)
@@ -144,6 +150,10 @@ const App = (): JSX.Element => {
       {user !== null ? (
         <>
           <div className='todoapp'>
+            <InvitationButton
+              apiUrl={apiUrl}
+              user={user}
+            />
             <Header onAddTodo={handleAddTodo} />
             <Todos
               onToggleCompleteTodo={handleCompleted}
