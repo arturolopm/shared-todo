@@ -159,6 +159,7 @@ const App = (): JSX.Element => {
             <InvitationButton
               apiUrl={apiUrl}
               user={user}
+              setUser={setUser}
             />
             <Footer
               activeCount={activeCount}

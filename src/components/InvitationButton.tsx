@@ -10,16 +10,32 @@ interface EmailID {
   _id: string
 }
 
-const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
+const InvitationButton: React.FC<Props> = ({ apiUrl, user, setUser }) => {
   const emailRef = useRef<HTMLInputElement>()
   const [isActive, setIsActive] = useState(false)
   const [data, setData] = useState<EmailID>()
+  const [acceptData, setAcceptData] = useState<object | undefined>()
   const [showInvitations, setShowInvitations] = useState(false)
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const invitationUrl = data ? `${apiUrl}/invitation/send` : 'Error'
+  const acceptInvitationUrl = acceptData
+    ? `${apiUrl}/invitation/accept`
+    : 'Error'
+
+  const acceptInvitationsItem = useApiFetch(
+    acceptInvitationUrl,
+    'POST',
+    acceptData,
+    user
+  )
+  useEffect(() => {
+    console.log(' accept invitation response', acceptInvitationsItem)
+    setAcceptData(undefined)
+  }, [acceptInvitationsItem])
+
   const getInvitationsUrl = `${apiUrl}/invitation`
   const invitationsItem = useApiFetch(getInvitationsUrl, 'GET', undefined, user)
-  console.log('invitationsItem', invitationsItem)
+  // console.log('invitationsItem', invitationsItem)
 
   useEffect(() => {
     if (invitationsItem.response) {
@@ -28,7 +44,7 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
   }, [invitationsItem])
 
   const invitation = useApiFetch(invitationUrl, 'POST', data, user)
-  console.log('invitation', invitation)
+  // console.log('invitation', invitation)
 
   const sendInvitation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -39,6 +55,9 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
   }
   const handleIsActive = () => {
     setIsActive((prev) => !prev)
+  }
+  const handleAccept = (_id: string) => {
+    setAcceptData({ _id })
   }
 
   return (
@@ -72,9 +91,15 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
             {showInvitations &&
               invitations.map((invitation) => {
                 return (
-                  <div>
+                  <div
+                    key={invitation._id}
+                    className='btn-container'>
                     <div>{invitation.sender}</div>
-                    <button className='darkbtn'>Accept</button>
+                    <button
+                      onClick={() => handleAccept(invitation._id)}
+                      className='darkbtn'>
+                      Accept
+                    </button>
                   </div>
                 )
               })}
