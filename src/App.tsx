@@ -10,10 +10,10 @@ import {
 import { TODO_FILTERS } from './consts'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
-import { DarkMode } from './components/DarkMode'
 import useApiFetch from './hooks/useApiFetch'
 import LoginForm from './components/LoginForm'
 import InvitationButton from './components/InvitationButton'
+import TopButtons from './components/TopButtons'
 
 // const mockTodos = [
 //   {
@@ -39,18 +39,32 @@ const App = (): JSX.Element => {
     dataFromStorage !== null ? JSON.parse(dataFromStorage) : null
 
   const [user, setUser] = useState<User | null>(userFromStorage)
-  console.log('user', user)
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user))
+    }
+  }, [user])
+  console.log(user)
 
+  const [shouldUpdate, setShouldUpdate] = useState(false)
   const initialTodos =
     user?.lists && user.lists[0]?.items ? user.lists[0].items : []
   const [todos, setTodos] = useState<TodoType[]>(initialTodos)
-  console.log(todos)
+  useEffect(() => {
+    console.log('RENDER')
+  }, [todos])
 
   const [toAdd, setToAdd] = useState<TodoType>()
+
   const [toModify, setToModify] = useState<TodoType>()
   const [toDelete, setToDelete] = useState<TodoId>()
-  const [removeCompleted, setRemoveCompleted] = useState<boolean>(false)
+  const [removeCompleted, setRemoveCompleted] = useState(false)
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShouldUpdate((prev) => !prev)
+    }, 50)
+  }, [toAdd])
   const apiUrl: string =
     typeof import.meta.env.VITE_SERVER_URL === 'string'
       ? `${import.meta.env.VITE_SERVER_URL}`
@@ -59,7 +73,13 @@ const App = (): JSX.Element => {
   const {
     response
     //  loading, error
-  } = useApiFetch(`${apiUrl}/item/${userID}`, 'GET', undefined, user!)
+  } = useApiFetch(
+    `${apiUrl}/item/${userID}`,
+    'GET',
+    undefined,
+    user!,
+    shouldUpdate
+  )
   useEffect(() => {
     if (response !== null) {
       setTodos(response)
@@ -92,14 +112,14 @@ const App = (): JSX.Element => {
     setTodos(newTodos)
   }
   const apiUrlWithId =
-    toModify?._id !== undefined ? `${apiUrl}/item/${toModify._id}` : 'Error'
+    toModify?._id !== undefined ? `${apiUrl}/item/${toModify?._id}` : 'Error'
 
   const apiResponse = useApiFetch(apiUrlWithId, 'PUT', toModify, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
   // const modifiedTodo: TodoType[] | undefined =
   //   apiResponse?.response ?? undefined
   // console.log(modifiedTodo)
   const apiUrlWithIdToDelete =
-    toDelete?._id !== undefined ? `${apiUrl}/item/${toDelete._id}` : 'Error'
+    toDelete?._id !== undefined ? `${apiUrl}/item/${toDelete?._id}` : 'Error'
 
   const deleteResponse = useApiFetch(
     apiUrlWithIdToDelete,
@@ -120,8 +140,15 @@ const App = (): JSX.Element => {
     handleRemoveAllCompleted()
   }, [removeCompleted])
 
-  const apiUrlDeleteMany = removeCompleted ? `${apiUrl}/item/` : 'Error'
-  const deleteAllCompletedResponse = useApiFetch(apiUrlDeleteMany, 'DELETE') // eslint-disable-line @typescript-eslint/no-unused-vars
+  const apiUrlDeleteMany = removeCompleted
+    ? `${apiUrl}/item/allCompleted/${user?._id}`
+    : 'Error'
+  const deleteAllCompletedResponse = useApiFetch(
+    apiUrlDeleteMany,
+    'DELETE',
+    undefined,
+    user!
+  ) // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const activeCount = todos.filter((todo) => !todo.completed).length
   const completedCount = todos.length - activeCount
@@ -146,7 +173,7 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <DarkMode />
+      <TopButtons apiUrl={apiUrl} />
       {user !== null ? (
         <>
           <div className='todoapp'>
@@ -159,7 +186,7 @@ const App = (): JSX.Element => {
             <InvitationButton
               apiUrl={apiUrl}
               user={user}
-              setUser={setUser}
+              setShouldUpdate={setShouldUpdate}
             />
             <Footer
               activeCount={activeCount}

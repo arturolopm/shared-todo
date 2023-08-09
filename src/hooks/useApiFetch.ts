@@ -21,7 +21,8 @@ const useApiFetch = (
   url: string,
   method: AxiosRequestConfig['method'] = 'GET',
   data?: any,
-  user?: User
+  user?: User,
+  shouldUpdate?: boolean
 ): ApiResponse => {
   // State variables to manage the API response
   const [response, setResponse] = useState<Todo[] | null>(null)
@@ -62,7 +63,7 @@ const useApiFetch = (
     }
 
     fetchData() // eslint-disable-line @typescript-eslint/no-floating-promises
-  }, [url, method, data])
+  }, [url, method, data, shouldUpdate])
 
   return { response, loading, error }
 }

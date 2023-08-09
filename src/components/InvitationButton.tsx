@@ -4,13 +4,18 @@ import { Invitation, User } from '../types'
 type Props = {
   apiUrl: string
   user: User
+  setShouldUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
 interface EmailID {
   email: string
   _id: string
 }
 
-const InvitationButton: React.FC<Props> = ({ apiUrl, user, setUser }) => {
+const InvitationButton: React.FC<Props> = ({
+  apiUrl,
+  user,
+  setShouldUpdate
+}) => {
   const emailRef = useRef<HTMLInputElement>()
   const [isActive, setIsActive] = useState(false)
   const [data, setData] = useState<EmailID>()
@@ -31,6 +36,7 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user, setUser }) => {
   useEffect(() => {
     console.log(' accept invitation response', acceptInvitationsItem)
     setAcceptData(undefined)
+    // setShouldUpdate((prev) => !prev)
   }, [acceptInvitationsItem])
 
   const getInvitationsUrl = `${apiUrl}/invitation`
