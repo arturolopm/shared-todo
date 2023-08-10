@@ -17,7 +17,7 @@ export type FilterValue = (typeof TODO_FILTERS)[keyof typeof TODO_FILTERS]
 export interface List {
   _id: string
   name: string
-  owners: string[]
+  owners: User[]
   items: ListOfTodos
 }
 export interface User {

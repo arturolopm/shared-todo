@@ -1,13 +1,14 @@
+import { List, User } from '../types'
 import { DarkMode } from './DarkMode'
 import { ShowUsers } from './ShowUsers'
 interface Props {
-  apiUrl: string
+  list: List
 }
-const TopButtons: React.FC<Props> = ({ apiUrl }) => {
+const TopButtons: React.FC<Props> = ({ list }) => {
   return (
     <div className='btn-container'>
       <DarkMode />
-      <ShowUsers apiUrl={apiUrl} />
+      <ShowUsers list={list} />
     </div>
   )
 }

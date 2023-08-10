@@ -5,7 +5,8 @@ import {
   type FilterValue,
   type TodoId,
   type Todo as TodoType,
-  type User
+  type User,
+  List
 } from './types'
 import { TODO_FILTERS } from './consts'
 import { Footer } from './components/Footer'
@@ -44,21 +45,19 @@ const App = (): JSX.Element => {
       localStorage.setItem('user', JSON.stringify(user))
     }
   }, [user])
-  console.log(user)
+  console.log('User', user)
 
   const [shouldUpdate, setShouldUpdate] = useState(false)
   const initialTodos =
     user?.lists && user.lists[0]?.items ? user.lists[0].items : []
   const [todos, setTodos] = useState<TodoType[]>(initialTodos)
-  useEffect(() => {
-    console.log('RENDER')
-  }, [todos])
 
   const [toAdd, setToAdd] = useState<TodoType>()
 
   const [toModify, setToModify] = useState<TodoType>()
   const [toDelete, setToDelete] = useState<TodoId>()
   const [removeCompleted, setRemoveCompleted] = useState(false)
+  const [list, setList] = useState<List>()
 
   useEffect(() => {
     setTimeout(() => {
@@ -82,9 +81,11 @@ const App = (): JSX.Element => {
   )
   useEffect(() => {
     if (response !== null) {
-      setTodos(response)
+      setTodos(response.items)
+      setList(response)
     }
   }, [response])
+
   const [filterSelected, setFilterSelected] = useState<FilterValue>(
     TODO_FILTERS.ALL
   )
@@ -173,7 +174,7 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <TopButtons apiUrl={apiUrl} />
+      <TopButtons list={list!} />
       {user !== null ? (
         <>
           <div className='todoapp'>

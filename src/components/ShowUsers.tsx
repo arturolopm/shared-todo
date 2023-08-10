@@ -1,19 +1,14 @@
-import { useState, useEffect } from 'react'
-import useApiFetch from '../hooks/useApiFetch'
+import { useState } from 'react'
+import { List } from '../types'
 interface Props {
-  apiUrl: string
+  list: List
 }
-export const ShowUsers: React.FC<Props> = ({ apiUrl }) => {
+export const ShowUsers: React.FC<Props> = ({ list }) => {
   const [showUsers, setShowUsers] = useState(false)
-  const [usersOnList, setUsersOnList] = useState([])
 
   const handleShowUsers = (): void => {
     setShowUsers((prev) => !prev)
   }
-  const response = useApiFetch(`${apiUrl}/item/list`, 'GET', undefined)
-  // useEffect(() => {
-  //   setUsersOnList(response)
-  // }, [response])
 
   return (
     <div className='btn-container'>
@@ -24,7 +19,18 @@ export const ShowUsers: React.FC<Props> = ({ apiUrl }) => {
         className='darkbtn showUsers'>
         {`${showUsers ? 'Hide' : 'Show'}`} partners
       </button>
-      {showUsers && ''}
+      <div>
+        {showUsers &&
+          list &&
+          list.owners?.map((owner) => {
+            return (
+              <div className='darkbtn'>
+                <div>{owner.name}</div>
+                <div>{owner.email}</div>
+              </div>
+            )
+          })}
+      </div>
     </div>
   )
 }
