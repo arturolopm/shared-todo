@@ -1,4 +1,4 @@
-import { List, User } from '../types'
+import { List } from '../types'
 import { DarkMode } from './DarkMode'
 import { ShowUsers } from './ShowUsers'
 interface Props {

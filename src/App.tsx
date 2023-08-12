@@ -15,6 +15,7 @@ import useApiFetch from './hooks/useApiFetch'
 import LoginForm from './components/LoginForm'
 import InvitationButton from './components/InvitationButton'
 import TopButtons from './components/TopButtons'
+import ActionAlert from './components/ActionAlert'
 
 // const mockTodos = [
 //   {
@@ -174,9 +175,9 @@ const App = (): JSX.Element => {
 
   return (
     <>
-      <TopButtons list={list!} />
       {user !== null ? (
         <>
+          <TopButtons list={list!} />
           <div className='todoapp'>
             <Header onAddTodo={handleAddTodo} />
             <Todos

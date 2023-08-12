@@ -22,9 +22,11 @@ export const ShowUsers: React.FC<Props> = ({ list }) => {
       <div>
         {showUsers &&
           list &&
-          list.owners?.map((owner) => {
+          list.owners?.map((owner, i) => {
             return (
-              <div className='darkbtn'>
+              <div
+                key={i}
+                className='darkbtn'>
                 <div>{owner.name}</div>
                 <div>{owner.email}</div>
               </div>
