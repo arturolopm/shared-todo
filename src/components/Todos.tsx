@@ -24,6 +24,7 @@ export const Todos: React.FC<Props> = ({
             _id={todo._id}
             name={todo.name}
             completed={todo.completed}
+            completedBy={todo.completedBy ?? ''}
             onToggleCompleteTodo={onToggleCompleteTodo}
             onRemoveTodo={onRemoveTodo}
           />

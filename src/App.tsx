@@ -46,7 +46,6 @@ const App = (): JSX.Element => {
       localStorage.setItem('user', JSON.stringify(user))
     }
   }, [user])
-  console.log('User', user)
 
   const [shouldUpdate, setShouldUpdate] = useState(false)
   const initialTodos =
@@ -106,7 +105,8 @@ const App = (): JSX.Element => {
         setToModify(todo)
         return {
           ...todo,
-          completed
+          completed,
+          completedBy: user!.name
         }
       }
       return todo
@@ -116,7 +116,7 @@ const App = (): JSX.Element => {
   const apiUrlWithId =
     toModify?._id !== undefined ? `${apiUrl}/item/${toModify?._id}` : 'Error'
 
-  const apiResponse = useApiFetch(apiUrlWithId, 'PUT', toModify, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
+  const apiCompletedResponse = useApiFetch(apiUrlWithId, 'PUT', toModify, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
   // const modifiedTodo: TodoType[] | undefined =
   //   apiResponse?.response ?? undefined
   // console.log(modifiedTodo)

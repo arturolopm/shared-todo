@@ -29,7 +29,6 @@ const InvitationButton: React.FC<Props> = ({
   const [acceptData, setAcceptData] = useState<object | undefined>()
   const [showInvitations, setShowInvitations] = useState(false)
   const [invitations, setInvitations] = useState<Invitation[]>([])
-  console.log('invitations', invitations)
 
   const [sendInvitationAlert, setSendInvitationAlert] = useState(false)
   const [acceptInvitationAlert, setAcceptInvitationAlert] = useState(false)
@@ -45,7 +44,6 @@ const InvitationButton: React.FC<Props> = ({
     user
   )
   useEffect(() => {
-    console.log(' accept invitation response', acceptInvitationsItem)
     setAcceptData(undefined)
     // setShouldUpdate((prev) => !prev)
   }, [acceptInvitationsItem])
@@ -79,7 +77,6 @@ const InvitationButton: React.FC<Props> = ({
   }
   const handleAccept = useCallback((_id: string) => {
     setAcceptData({ _id })
-    console.log(_id)
 
     const newInvitations = invitations.filter(
       (invitation) => invitation._id !== _id

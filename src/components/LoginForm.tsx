@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useRef, LegacyRef } from 'react'
 import useAuth from '../hooks/useAuth'
 import type { User, UserValidation } from '../types'
+import GeneralAlert from './GeneralAlert'
 
 type logOrRegister = 'login' | 'register' | 'none'
 
@@ -13,6 +14,7 @@ interface LoginFormProps {
 const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
   const [logOrRegister, setLogOrRegister] = useState<logOrRegister>('none')
   const [action, setAction] = useState<logOrRegister>('none')
+  const [alert, setAlert] = useState(false)
   const [data, setData] = useState<UserValidation | undefined>()
 
   const emailRef = useRef<HTMLInputElement>()
@@ -31,12 +33,19 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setData({
-      name: nameRef.current?.value as unknown as string,
-      email: emailRef.current?.value as unknown as string,
-      password: passwordRef.current?.value as unknown as string
-    })
-    setAction('register')
+    if (passwordRef.current?.value !== confirmPasswordRef.current?.value) {
+      setAlert(true)
+    } else {
+      setData({
+        name: nameRef.current?.value as unknown as string,
+        email: emailRef.current?.value as unknown as string,
+        password: passwordRef.current?.value as unknown as string
+      })
+      setAction('register')
+    }
+  }
+  const handleClose = () => {
+    setAlert(false)
   }
 
   const urlToValidate = useMemo(() => (data ? apiUrl : 'Error'), [apiUrl, data])
@@ -109,6 +118,12 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
         </div>
       ) : (
         <div className='todoapp'>
+          {alert && (
+            <GeneralAlert
+              advise='No matching passwords'
+              close={() => handleClose()}
+            />
+          )}
           <h2>Register</h2>
           <form
             className='main'
@@ -116,24 +131,28 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
             <input
               type='text'
               className='new-todo'
+              required
               placeholder='Name'
               ref={nameRef as LegacyRef<HTMLInputElement> | undefined}
             />
             <input
               type='email'
               className='new-todo'
+              required
               placeholder='Email'
               ref={emailRef as LegacyRef<HTMLInputElement> | undefined}
             />
             <input
               type='password'
               className='new-todo'
+              required
               placeholder='Password'
               ref={passwordRef as LegacyRef<HTMLInputElement> | undefined}
             />
             <input
               type='password'
               className='new-todo'
+              required
               placeholder='Confirm Password'
               ref={
                 confirmPasswordRef as LegacyRef<HTMLInputElement> | undefined

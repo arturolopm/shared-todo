@@ -4,6 +4,7 @@ export interface Todo {
   _id?: string
   name: string
   completed: boolean
+  completedBy?: string
 }
 
 export type TodoTitle = Pick<Todo, 'name'>

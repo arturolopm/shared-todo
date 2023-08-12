@@ -5,13 +5,15 @@ interface Props extends TodoType {
     _id,
     completed
   }: Pick<TodoType, '_id' | 'completed'>) => void
+  completedBy: string
 }
 export const Todo: React.FC<Props> = ({
   _id,
   name,
   completed,
   onToggleCompleteTodo,
-  onRemoveTodo
+  onRemoveTodo,
+  completedBy
 }) => {
   const handleChangeCheckBox = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -28,7 +30,11 @@ export const Todo: React.FC<Props> = ({
         checked={completed}
         onChange={handleChangeCheckBox}
       />
-      <label> {name}</label>
+      <label>
+        {' '}
+        {name}
+        {completed && ` (${completedBy})`}
+      </label>
       <button
         className='destroy'
         onClick={() => {
