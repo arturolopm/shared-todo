@@ -79,7 +79,9 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
     setInvitations(newInvitations)
     // setShouldUpdate(true)
     setAcceptInvitationAlert(false)
-    window.location.reload()
+    setTimeout(() => {
+      window.location.reload()
+    }, 200)
     // setAcceptData(undefined)
   }, [])
   const handleAcceptAlertClose = useCallback(() => {
