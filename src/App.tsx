@@ -47,7 +47,7 @@ const App = (): JSX.Element => {
     }
   }, [user])
 
-  const [shouldUpdate, setShouldUpdate] = useState(false)
+  // const [shouldUpdate, setShouldUpdate] = useState(false)
 
   const [todos, setTodos] = useState<TodoType[]>([])
 
@@ -59,11 +59,11 @@ const App = (): JSX.Element => {
   const [removeCompleted, setRemoveCompleted] = useState(false)
   const [list, setList] = useState<List>()
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShouldUpdate((prev) => !prev)
-    }, 200)
-  }, [toAdd])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setShouldUpdate((prev) => !prev)
+  //   }, 200)
+  // }, [toAdd])
   const apiUrl: string =
     typeof import.meta.env.VITE_SERVER_URL === 'string'
       ? `${import.meta.env.VITE_SERVER_URL}`
@@ -76,8 +76,8 @@ const App = (): JSX.Element => {
     `${apiUrl}/item/${userID}`,
     'GET',
     undefined,
-    user!,
-    shouldUpdate
+    user!
+    // shouldUpdate
   )
   useEffect(() => {
     if (response !== null) {
