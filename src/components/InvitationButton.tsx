@@ -8,6 +8,7 @@ import React, {
 import useApiFetch from '../hooks/useApiFetch'
 import { Invitation, User } from '../types'
 import ActionAlert from './ActionAlert'
+import GeneralAlert from './GeneralAlert'
 type Props = {
   apiUrl: string
   user: User
@@ -61,7 +62,7 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
       email: emailRef.current?.value as unknown as string,
       _id: user._id
     }))
-    setSendInvitationAlert(false)
+    setSendInvitationAlert(true)
     if (emailRef.current) {
       emailRef.current.value = ''
     }
@@ -106,16 +107,13 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
                 ref={emailRef as LegacyRef<HTMLInputElement> | undefined}
               />
               {sendInvitationAlert && (
-                <ActionAlert
-                  parent={'Continue'}
-                  advise=''
-                  decline={() => setSendInvitationAlert(false)}
-                  accept={() => sendInvitation()}
+                <GeneralAlert
+                  advise='Invitation sent'
                   close={() => setSendInvitationAlert(false)}
                 />
               )}
               <button
-                onClick={() => setSendInvitationAlert(true)}
+                onClick={() => sendInvitation()}
                 className='darkbtn'>
                 Send
               </button>
