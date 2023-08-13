@@ -8,7 +8,7 @@ export const DarkMode: React.FC = () => {
     getThemeInStorage() === 'false' || getThemeInStorage() === null
   )
 
-  const [darkMode, setDarkMode] = useState(theme || false)
+  const [darkMode, setDarkMode] = useState<boolean>(theme || true)
 
   const handleDarkMode = (): void => {
     const themeToSave = !darkMode
