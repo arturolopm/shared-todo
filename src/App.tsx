@@ -105,6 +105,7 @@ const App = (): JSX.Element => {
       if (todo._id === _id) {
         const userNameToModify = user!.name
         todo.completedBy = userNameToModify
+        todo.completed = completed
         setToModify(todo)
         return {
           ...todo,
