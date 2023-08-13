@@ -18,8 +18,6 @@ export const Todo: React.FC<Props> = ({
   const handleChangeCheckBox = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    console.log('name', name)
-
     onToggleCompleteTodo({ _id, completed: e.target.checked })
   }
   return (

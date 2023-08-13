@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { type FilterValue } from '../types'
+import ActionAlert from './ActionAlert'
 import { Filters } from './Filters'
 
 interface Props {
@@ -15,6 +17,10 @@ export const Footer: React.FC<Props> = ({
   handleFilterChange,
   onDeleteCompleted
 }) => {
+  const [alert, setAlert] = useState(false)
+  const handleCloseAlert = () => {
+    setAlert(false)
+  }
   return (
     <footer className='footer'>
       <span className='todo-count'>
@@ -26,13 +32,28 @@ export const Footer: React.FC<Props> = ({
       />
 
       {completedCount > 0 && (
-        <button
-          className='clear-completed'
-          onClick={() => {
-            onDeleteCompleted()
-          }}>
-          Delete completed
-        </button>
+        <>
+          {alert && (
+            <ActionAlert
+              accept={() => onDeleteCompleted()}
+              decline={() => {
+                handleCloseAlert()
+              }}
+              close={() => {
+                handleCloseAlert()
+              }}
+              parent='Delete all completed'
+              advise='You can clean your list from all completed items but you will not be able to recover them'
+            />
+          )}
+          <button
+            className='clear-completed'
+            onClick={() => {
+              setAlert(true)
+            }}>
+            Delete completed
+          </button>
+        </>
       )}
     </footer>
   )

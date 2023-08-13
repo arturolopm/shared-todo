@@ -41,6 +41,7 @@ const App = (): JSX.Element => {
     dataFromStorage !== null ? JSON.parse(dataFromStorage) : null
 
   const [user, setUser] = useState<User | null>(userFromStorage)
+
   useEffect(() => {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user))
@@ -48,13 +49,13 @@ const App = (): JSX.Element => {
   }, [user])
 
   const [shouldUpdate, setShouldUpdate] = useState(false)
-  const initialTodos =
-    user?.lists && user.lists[0]?.items ? user.lists[0].items : []
-  const [todos, setTodos] = useState<TodoType[]>(initialTodos)
+
+  const [todos, setTodos] = useState<TodoType[]>([])
 
   const [toAdd, setToAdd] = useState<TodoType>()
 
   const [toModify, setToModify] = useState<TodoType>()
+
   const [toDelete, setToDelete] = useState<TodoId>()
   const [removeCompleted, setRemoveCompleted] = useState(false)
   const [list, setList] = useState<List>()
@@ -62,7 +63,7 @@ const App = (): JSX.Element => {
   useEffect(() => {
     setTimeout(() => {
       setShouldUpdate((prev) => !prev)
-    }, 50)
+    }, 200)
   }, [toAdd])
   const apiUrl: string =
     typeof import.meta.env.VITE_SERVER_URL === 'string'
@@ -92,7 +93,7 @@ const App = (): JSX.Element => {
 
   const handleRemove = ({ _id }: TodoId): void => {
     setToDelete({ _id })
-    const newTodos = todos.filter((todo) => todo._id !== _id)
+    const newTodos = todos?.filter((todo) => todo._id !== _id)
     setTodos(newTodos)
   }
 
@@ -100,15 +101,18 @@ const App = (): JSX.Element => {
     _id,
     completed
   }: Pick<TodoType, '_id' | 'completed'>): void => {
-    const newTodos = todos.map((todo) => {
+    const newTodos = todos?.map((todo) => {
       if (todo._id === _id) {
+        const userNameToModify = user!.name
+        todo.completedBy = userNameToModify
         setToModify(todo)
         return {
           ...todo,
           completed,
-          completedBy: user!.name
+          completedBy: userNameToModify
         }
       }
+
       return todo
     })
     setTodos(newTodos)
@@ -135,7 +139,7 @@ const App = (): JSX.Element => {
   }
 
   const handleRemoveAllCompleted = (): void => {
-    const newTodos = todos.filter((todo) => !todo.completed)
+    const newTodos = todos?.filter((todo) => !todo.completed)
     setTodos(newTodos)
   }
   useEffect(() => {
@@ -152,10 +156,10 @@ const App = (): JSX.Element => {
     user!
   ) // eslint-disable-line @typescript-eslint/no-unused-vars
 
-  const activeCount = todos.filter((todo) => !todo.completed).length
-  const completedCount = todos.length - activeCount
+  const activeCount = todos?.filter((todo) => !todo.completed)?.length
+  const completedCount = todos?.length - activeCount
 
-  const filteredTodos = todos.filter((todo) => {
+  const filteredTodos = todos?.filter((todo) => {
     if (filterSelected === TODO_FILTERS.ACTIVE) return !todo.completed
     if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed
     return todo

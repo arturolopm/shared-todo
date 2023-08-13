@@ -16,6 +16,7 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
   const [action, setAction] = useState<logOrRegister>('none')
   const [alert, setAlert] = useState(false)
   const [data, setData] = useState<UserValidation | undefined>()
+  const [adviseForm, setAdviseForm] = useState('')
 
   const emailRef = useRef<HTMLInputElement>()
   const passwordRef = useRef<HTMLInputElement>()
@@ -34,6 +35,7 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (passwordRef.current?.value !== confirmPasswordRef.current?.value) {
+      setAdviseForm("Passwords don't match")
       setAlert(true)
     } else {
       setData({
@@ -53,15 +55,34 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
   const { response } = useAuth(action, urlToValidate, 'POST', data)
 
   useEffect(() => {
+    if (response === 'ALREADY_USER') {
+      setAdviseForm('Email already registered please click on log In instead')
+      setAlert(true)
+      setAction('none')
+    }
+    if (response === 'USER_NOT_FOUND') {
+      setAdviseForm('User not found please verify email or register instead')
+      setAlert(true)
+      setAction('none')
+    }
+    if (response === 'INCORRECT_PASSWORD') {
+      setAdviseForm('Incorrect Password')
+      setAlert(true)
+      setAction('none')
+    }
+
     if (
       response !== null &&
       response !== 'ALREADY_USER' &&
-      response !== 'USER_NOT_FOUND'
+      response !== 'USER_NOT_FOUND' &&
+      response !== 'INCORRECT_PASSWORD'
     ) {
       localStorage.setItem('user', JSON.stringify(response))
       setUser(response as User)
     }
-  }, [response])
+
+    setAction('none')
+  }, [response, action])
 
   return (
     <>
@@ -83,6 +104,12 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
         </div>
       ) : logOrRegister === 'login' ? (
         <div className='todoapp'>
+          {alert && (
+            <GeneralAlert
+              advise={adviseForm}
+              close={() => handleClose()}
+            />
+          )}
           <h2>Login </h2>
           <form
             className='main'
@@ -90,12 +117,14 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
             <input
               type='text'
               className='new-todo'
+              required
               placeholder='Email'
               ref={emailRef as LegacyRef<HTMLInputElement> | undefined}
             />
             <input
               type='password'
               className='new-todo'
+              required
               placeholder='Password'
               ref={passwordRef as LegacyRef<HTMLInputElement> | undefined}
             />
@@ -120,7 +149,7 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
         <div className='todoapp'>
           {alert && (
             <GeneralAlert
-              advise='No matching passwords'
+              advise={adviseForm}
               close={() => handleClose()}
             />
           )}
@@ -167,7 +196,7 @@ const LoginForm = ({ apiUrl, setUser }: LoginFormProps): JSX.Element => {
             </div>
           </form>
           <div>
-            or if you don't have an account{' '}
+            or if you already have an account an account{' '}
             <button
               className='text-underlined'
               onClick={() => setLogOrRegister('login')}>

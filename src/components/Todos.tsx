@@ -15,7 +15,7 @@ export const Todos: React.FC<Props> = ({
 }) => {
   return (
     <ul className='todo-list'>
-      {todos.map((todo) => (
+      {todos?.map((todo) => (
         <li
           key={todo._id}
           className={`${todo.completed ? 'completed' : ''}`}>
