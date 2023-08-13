@@ -62,7 +62,7 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
       email: emailRef.current?.value as unknown as string,
       _id: user._id
     }))
-    setSendInvitationAlert(true)
+    setSendInvitationAlert(false)
     if (emailRef.current) {
       emailRef.current.value = ''
     }
@@ -118,7 +118,7 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
                 />
               )}
               <button
-                onClick={() => sendInvitation()}
+                onClick={() => setSendInvitationAlert(true)}
                 className='darkbtn'>
                 Send
               </button>
