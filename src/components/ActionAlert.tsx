@@ -1,4 +1,3 @@
-import { useState } from 'react'
 interface Props {
   parent: string
   close: () => void

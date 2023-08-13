@@ -11,18 +11,13 @@ import ActionAlert from './ActionAlert'
 type Props = {
   apiUrl: string
   user: User
-  setShouldUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
 interface EmailID {
   email: string
   _id: string
 }
 
-const InvitationButton: React.FC<Props> = ({
-  apiUrl,
-  user,
-  setShouldUpdate
-}) => {
+const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
   const emailRef = useRef<HTMLInputElement>()
   const [isActive, setIsActive] = useState(false)
   const [data, setData] = useState<EmailID>()
@@ -58,8 +53,7 @@ const InvitationButton: React.FC<Props> = ({
     }
   }, [invitationsItem])
 
-  const invitation = useApiFetch(invitationUrl, 'POST', data, user)
-  // console.log('invitation', invitation)
+  useApiFetch(invitationUrl, 'POST', data, user)
 
   const sendInvitation = () => {
     setData((prevData) => ({

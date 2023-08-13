@@ -15,7 +15,6 @@ import useApiFetch from './hooks/useApiFetch'
 import LoginForm from './components/LoginForm'
 import InvitationButton from './components/InvitationButton'
 import TopButtons from './components/TopButtons'
-import ActionAlert from './components/ActionAlert'
 
 // const mockTodos = [
 //   {
@@ -121,19 +120,14 @@ const App = (): JSX.Element => {
   const apiUrlWithId =
     toModify?._id !== undefined ? `${apiUrl}/item/${toModify?._id}` : 'Error'
 
-  const apiCompletedResponse = useApiFetch(apiUrlWithId, 'PUT', toModify, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
+  useApiFetch(apiUrlWithId, 'PUT', toModify, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
   // const modifiedTodo: TodoType[] | undefined =
   //   apiResponse?.response ?? undefined
   // console.log(modifiedTodo)
   const apiUrlWithIdToDelete =
     toDelete?._id !== undefined ? `${apiUrl}/item/${toDelete?._id}` : 'Error'
 
-  const deleteResponse = useApiFetch(
-    apiUrlWithIdToDelete,
-    'DELETE',
-    undefined,
-    user!
-  ) // eslint-disable-line @typescript-eslint/no-unused-vars
+  useApiFetch(apiUrlWithIdToDelete, 'DELETE', undefined, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const handleFilterChange = (filter: FilterValue): void => {
     setFilterSelected(filter)
@@ -150,12 +144,7 @@ const App = (): JSX.Element => {
   const apiUrlDeleteMany = removeCompleted
     ? `${apiUrl}/item/allCompleted/${user?._id}`
     : 'Error'
-  const deleteAllCompletedResponse = useApiFetch(
-    apiUrlDeleteMany,
-    'DELETE',
-    undefined,
-    user!
-  ) // eslint-disable-line @typescript-eslint/no-unused-vars
+  useApiFetch(apiUrlDeleteMany, 'DELETE', undefined, user!) // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const activeCount = todos?.filter((todo) => !todo.completed)?.length
   const completedCount = todos?.length - activeCount
@@ -174,8 +163,8 @@ const App = (): JSX.Element => {
 
     setTodos((prevTodos) => [...prevTodos, data])
   }
-  const addedTodo: TodoType[] | undefined =
-    useApiFetch(`${apiUrl}/item/${userID}`, 'Post', toAdd, user!)?.response ??
+
+  useApiFetch(`${apiUrl}/item/${userID}`, 'Post', toAdd, user!)?.response ??
     undefined
 
   return (
@@ -193,7 +182,6 @@ const App = (): JSX.Element => {
             <InvitationButton
               apiUrl={apiUrl}
               user={user}
-              setShouldUpdate={setShouldUpdate}
             />
             <Footer
               activeCount={activeCount}
