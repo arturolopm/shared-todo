@@ -12,7 +12,9 @@ export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
     setInputValue('')
   }
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      className='btn-container'
+      onSubmit={handleSubmit}>
       <input
         className='new-todo'
         value={inputValue}
@@ -22,6 +24,7 @@ export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
         placeholder='What do you want to do?'
         autoFocus
       />
+      {inputValue && <button className='darkbtn'>add</button>}
     </form>
   )
 }
