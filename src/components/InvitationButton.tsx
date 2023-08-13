@@ -107,8 +107,13 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
                 ref={emailRef as LegacyRef<HTMLInputElement> | undefined}
               />
               {sendInvitationAlert && (
-                <GeneralAlert
-                  advise='Invitation sent'
+                <ActionAlert
+                  parent='send?'
+                  advise=''
+                  accept={() => sendInvitation()}
+                  decline={() => {
+                    setSendInvitationAlert(false)
+                  }}
                   close={() => setSendInvitationAlert(false)}
                 />
               )}
