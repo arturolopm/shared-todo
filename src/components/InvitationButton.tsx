@@ -8,7 +8,6 @@ import React, {
 import useApiFetch from '../hooks/useApiFetch'
 import { Invitation, User } from '../types'
 import ActionAlert from './ActionAlert'
-import GeneralAlert from './GeneralAlert'
 type Props = {
   apiUrl: string
   user: User
