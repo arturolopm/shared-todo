@@ -161,11 +161,17 @@ const App = (): JSX.Element => {
     }
     setToAdd(data)
 
-    setTodos((prevTodos) => [...prevTodos, data])
+    // setTodos((prevTodos) => [...prevTodos, data])
   }
 
-  useApiFetch(`${apiUrl}/item/${userID}`, 'Post', toAdd, user!)?.response ??
+  const addedTodo =
+    useApiFetch(`${apiUrl}/item/${userID}`, 'Post', toAdd, user!)?.response ??
     undefined
+  useEffect(() => {
+    if (addedTodo) {
+      setTodos((prevTodos) => [...prevTodos, addedTodo])
+    }
+  }, [addedTodo])
 
   return (
     <>
