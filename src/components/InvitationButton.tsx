@@ -38,6 +38,7 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
     acceptData,
     user
   )
+
   useEffect(() => {
     setAcceptData(undefined)
     // setShouldUpdate((prev) => !prev)
@@ -69,21 +70,24 @@ const InvitationButton: React.FC<Props> = ({ apiUrl, user }) => {
   const handleIsActive = () => {
     setIsActive((prev) => !prev)
   }
-  const handleAccept = useCallback((_id: string) => {
-    setAcceptData({ _id })
+  const handleAccept = useCallback(
+    (_id: string) => {
+      setAcceptData({ _id })
 
-    const newInvitations = invitations.filter(
-      (invitation) => invitation._id !== _id
-    )
+      // const newInvitations = invitations.filter(
+      //   (invitation) => invitation._id !== _id
+      // )
 
-    setInvitations(newInvitations)
-    // setShouldUpdate(true)
-    setAcceptInvitationAlert(false)
-    setTimeout(() => {
-      window.location.reload()
-    }, 200)
-    // setAcceptData(undefined)
-  }, [])
+      // setInvitations(newInvitations)
+      // setShouldUpdate(true)
+      setAcceptInvitationAlert(false)
+      setTimeout(() => {
+        window.location.reload()
+      }, 300)
+      // setAcceptData(undefined)
+    },
+    [setAcceptData]
+  )
   const handleAcceptAlertClose = useCallback(() => {
     setAcceptInvitationAlert(false)
   }, [acceptInvitationAlert])
