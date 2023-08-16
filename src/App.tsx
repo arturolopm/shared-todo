@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Todos } from './components/Todos'
 import {
-  type TodoTitle,
   type FilterValue,
   type TodoId,
   type Todo as TodoType,
   type User,
-  List
+  type List,
+  type TodoCreate
 } from './types'
 import { TODO_FILTERS } from './consts'
 import { Footer } from './components/Footer'
@@ -15,6 +15,7 @@ import useApiFetch from './hooks/useApiFetch'
 import LoginForm from './components/LoginForm'
 import InvitationButton from './components/InvitationButton'
 import TopButtons from './components/TopButtons'
+import { ShowUsers } from './components/ShowUsers'
 
 // const mockTodos = [
 //   {
@@ -50,6 +51,7 @@ const App = (): JSX.Element => {
   // const [shouldUpdate, setShouldUpdate] = useState(false)
 
   const [todos, setTodos] = useState<TodoType[]>([])
+  console.log('Todos', todos)
 
   const [toAdd, setToAdd] = useState<TodoType>()
 
@@ -154,10 +156,11 @@ const App = (): JSX.Element => {
     if (filterSelected === TODO_FILTERS.COMPLETED) return todo.completed
     return todo
   })
-  const handleAddTodo = async ({ name }: TodoTitle): Promise<void> => {
+  const handleAddTodo = async ({ name, time }: TodoCreate): Promise<void> => {
     const data = {
       name,
-      completed: false
+      completed: false,
+      time
     }
     setToAdd(data)
 
@@ -177,7 +180,7 @@ const App = (): JSX.Element => {
     <>
       {user !== null ? (
         <>
-          <TopButtons list={list!} />
+          <TopButtons />
           <div className='todoapp'>
             <Header onAddTodo={handleAddTodo} />
             <Todos
@@ -199,6 +202,10 @@ const App = (): JSX.Element => {
               handleFilterChange={handleFilterChange}
             />
           </div>
+          <ShowUsers
+            todos={todos}
+            list={list!}
+          />
         </>
       ) : (
         <LoginForm

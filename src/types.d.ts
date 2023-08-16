@@ -5,9 +5,11 @@ export interface Todo {
   name: string
   completed: boolean
   completedBy?: string
+  time: number
 }
 
 export type TodoTitle = Pick<Todo, 'name'>
+export type TodoCreate = Pick<Todo, 'name' | 'time'>
 export type TodoId = Pick<Todo, '_id'>
 export type TodoCompleted = Pick<Todo, 'completed'>
 

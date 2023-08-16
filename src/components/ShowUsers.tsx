@@ -1,13 +1,29 @@
 import { useState } from 'react'
-import { List } from '../types'
+import type { List, Todo } from '../types'
 interface Props {
   list: List
+  todos: Todo[]
 }
-export const ShowUsers: React.FC<Props> = ({ list }) => {
+interface GetTimeProps {
+  todoList: Todo[]
+  name: string
+}
+export const ShowUsers: React.FC<Props> = ({ list, todos }) => {
   const [showUsers, setShowUsers] = useState(false)
 
+  console.log('Todolist', todos)
   const handleShowUsers = (): void => {
     setShowUsers((prev) => !prev)
+  }
+  const getTimeByUser = ({ name, todoList }: GetTimeProps): number => {
+    const totalTime = todoList.reduce((accumulator, todo) => {
+      if (todo.completed && todo.completedBy === name) {
+        return accumulator + todo.time
+      }
+      return accumulator
+    }, 0)
+
+    return totalTime
   }
 
   return (
@@ -17,7 +33,7 @@ export const ShowUsers: React.FC<Props> = ({ list }) => {
           handleShowUsers()
         }}
         className='darkbtn showUsers'>
-        {`${showUsers ? 'Hide' : 'Show'}`} partners
+        {`${showUsers ? 'Hide' : 'Show'}`} results
       </button>
       <div>
         {showUsers &&
@@ -25,10 +41,16 @@ export const ShowUsers: React.FC<Props> = ({ list }) => {
           list.owners?.map((owner, i) => {
             return (
               <div
-                key={i}
-                className='darkbtn'>
-                <div>{owner.name}</div>
-                <div>{owner.email}</div>
+                className='btn-container'
+                key={i}>
+                <div className='darkbtn'>
+                  <div>
+                    {owner.name}{' '}
+                    {getTimeByUser({ name: owner.name!, todoList: todos })}{' '}
+                    minutes
+                  </div>
+                  <div>{owner.email}</div>
+                </div>
               </div>
             )
           })}

@@ -23,6 +23,7 @@ export const Todos: React.FC<Props> = ({
             key={todo._id}
             _id={todo._id}
             name={todo.name}
+            time={todo.time}
             completed={todo.completed}
             completedBy={todo.completedBy ?? ''}
             onToggleCompleteTodo={onToggleCompleteTodo}

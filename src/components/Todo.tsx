@@ -11,6 +11,7 @@ export const Todo: React.FC<Props> = ({
   _id,
   name,
   completed,
+  time,
   onToggleCompleteTodo,
   onRemoveTodo,
   completedBy
@@ -31,7 +32,8 @@ export const Todo: React.FC<Props> = ({
       <label>
         {' '}
         {name}
-        {completed && ` (${completedBy})`}
+        {completed && ` by ${completedBy} `}
+        {time && ` (${time} minutes)`}
       </label>
       <button
         className='destroy'

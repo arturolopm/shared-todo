@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { type TodoTitle } from '../types'
+import { type TodoCreate } from '../types'
 
 interface Props {
-  saveTodo: ({ name }: TodoTitle) => Promise<void>
+  saveTodo: ({ name, time }: TodoCreate) => Promise<void>
 }
 export const CreateTodo: React.FC<Props> = ({ saveTodo }) => {
   const [inputValue, setInputValue] = useState('')
   const [timeToComplete, setTimeToComplete] = useState(15)
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    void saveTodo({ name: inputValue })
+    void saveTodo({ name: inputValue, time: timeToComplete })
     setInputValue('')
   }
   const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
